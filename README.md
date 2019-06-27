@@ -28,3 +28,12 @@ This supports all the standard oData filters, triggers and parameters as you wou
 ![Valid Demo](https://i.imgur.com/g76dmlW.png)
 
 ![Bad Token](https://i.imgur.com/VD2HcMA.png)
+
+# Generating Tokens and Such
+Creating the tokens and the BAQ white list I'll leave as an exercise to each company. The basic implementation we've doen is to use a UD1XX and UD1XXA records (Header , Child)
+Where the Header has the Token as Key1 and the Child records are Key1= BAQID
+So UD100-> Key1: LARRY
+   UD100A => ChildKey1: zCustomer01
+Then the authorization BAQ simply returns a record (or not) if the passed in parameters match.
+
+Simple, the token can be whatever you want we use a GUID.
