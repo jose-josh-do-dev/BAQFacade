@@ -34,8 +34,7 @@ This supports all the standard oData filters, triggers and parameters as you wou
 ![Bad Token](https://i.imgur.com/VD2HcMA.png)
 
 # Generating Tokens and Such
-Creating the tokens and the BAQ white list I'll leave as an exercise to each company. The basic implementation we've doen is to use a UD1XX and UD1XXA records (Header , Child)
-Where the Header has the Token as Key1 and the Child records are Key1= BAQID
+Creating the tokens and the BAQ white list I'll leave as an exercise to each company. The basic implementation we've done is to use a UD1XX and UD1XXA records (Header, Child) Where the Header has the Token as Key1 and the Child records are Key1= BAQID
 
 So 
 UD100-> Key1: LARRY
