@@ -77,36 +77,41 @@ namespace BAQFacade.Utils
         /// <returns></returns>
         public static bool ValidSession(string guid, string baqID, string _path, string _user, string _authBAQ, out string msg)
         {
-            var restClient = new RestSharp.RestClient(_path);
-            var request = new RestSharp.RestRequest($"BaqSvc/{_authBAQ}");
-
-            request.Parameters.Add(new RestSharp.Parameter("TokenID", guid, RestSharp.ParameterType.QueryString));
-            request.Parameters.Add(new RestSharp.Parameter("BAQID", baqID, RestSharp.ParameterType.QueryString));
-            request.AddHeader("Authorization", $"Basic {EpiUtils.Base64Encode(_user)}");
-
-            IRestResponse response = restClient.Execute(request, Method.GET);
-            msg = response.Content;
-            switch (response.StatusCode)
+            if (string.IsNullOrEmpty(guid))
             {
-                case System.Net.HttpStatusCode.BadRequest:
-                case System.Net.HttpStatusCode.Unauthorized:
-                default:
-                    {
-                        msg = $"Token: {guid} is not Authorized to Execute BAQ: {baqID}";
-                        return false;
-                    }
-                case System.Net.HttpStatusCode.OK:
-                    {
-                        dynamic val = Newtonsoft.Json.JsonConvert.DeserializeObject(msg);
-                        if (val.value.Count > 0)
-                            return true;
-                        else
+                var restClient = new RestSharp.RestClient(_path);
+                var request = new RestSharp.RestRequest($"BaqSvc/{_authBAQ}");
+
+                request.Parameters.Add(new RestSharp.Parameter("TokenID", guid, RestSharp.ParameterType.QueryString));
+                request.Parameters.Add(new RestSharp.Parameter("BAQID", baqID, RestSharp.ParameterType.QueryString));
+                request.AddHeader("Authorization", $"Basic {EpiUtils.Base64Encode(_user)}");
+
+                IRestResponse response = restClient.Execute(request, Method.GET);
+                msg = response.Content;
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.BadRequest:
+                    case System.Net.HttpStatusCode.Unauthorized:
+                    default:
                         {
                             msg = $"Token: {guid} is not Authorized to Execute BAQ: {baqID}";
                             return false;
                         }
-                    }
+                    case System.Net.HttpStatusCode.OK:
+                        {
+                            dynamic val = Newtonsoft.Json.JsonConvert.DeserializeObject(msg);
+                            if (val.value.Count > 0)
+                                return true;
+                            else
+                            {
+                                msg = $"Token: {guid} is not Authorized to Execute BAQ: {baqID}";
+                                return false;
+                            }
+                        }
+                }
             }
+            msg = $"Token: {guid} is not Authorized to Execute BAQ: {baqID}";
+            return false;
         }
 
     }
