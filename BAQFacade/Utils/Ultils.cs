@@ -77,7 +77,7 @@ namespace BAQFacade.Utils
         /// <returns></returns>
         public static bool ValidSession(string guid, string baqID, string _path, string _user, string _authBAQ, out string msg)
         {
-            if (string.IsNullOrEmpty(guid))
+            if (!string.IsNullOrEmpty(guid))
             {
                 var restClient = new RestSharp.RestClient(_path);
                 var request = new RestSharp.RestRequest($"BaqSvc/{_authBAQ}");
